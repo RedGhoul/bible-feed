@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:watch_it/watch_it.dart';
 
 import '../manager/setting_manager.dart';
-import '_constants.dart';
+import '_build_context_extension.dart';
+import '_spacing.dart';
 
 class Setting<T extends SettingManager> extends WatchingWidget {
   @override
@@ -15,12 +16,18 @@ class Setting<T extends SettingManager> extends WatchingWidget {
         ignoring: !settingManager.canEnable,
         child: Card(
           child: Padding(
-            padding: const EdgeInsets.all(Constants.defaultSpacing),
+            padding: AppSpacing.paddingSM,
             child: SwitchListTile(
-              title: Text(settingManager.title, style: const TextStyle(fontSize: 20)),
+              title: Text(
+                settingManager.title,
+                style: context.settingsTitle,
+              ),
               subtitle: Padding(
-                padding: const EdgeInsets.only(top: Constants.defaultSpacing),
-                child: Text(settingManager.subtitle),
+                padding: const EdgeInsets.only(top: AppSpacing.sm),
+                child: Text(
+                  settingManager.subtitle,
+                  style: context.textTheme.bodyMedium,
+                ),
               ),
               value: settingManager.isEnabled,
               onChanged: (value) => settingManager.isEnabled = value,

@@ -5,7 +5,8 @@ import 'package:watch_it/watch_it.dart';
 import '../manager/chapter_split_manager.dart';
 import '../manager/chapter_split_setting_manager.dart';
 import '../model/feed.dart';
-import '_constants.dart';
+import '_build_context_extension.dart';
+import '_spacing.dart';
 
 class FeedBookChapter extends WatchingWidget {
   final Feed feed;
@@ -19,13 +20,14 @@ class FeedBookChapter extends WatchingWidget {
 
     return Expanded(
       child: Padding(
-        padding: Constants.defaultPadding,
+        padding: AppSpacing.paddingXS,
         child: Center(
           child: AutoSizeText(
             '${feed.book.name} ${feed.state.chapter} $chapterSplitLabel'.trim(),
             maxLines: maxLines,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
+            style: context.textTheme.headlineSmall,
           ),
         ),
       ),

@@ -4,6 +4,7 @@ import 'package:watch_it/watch_it.dart';
 import '../manager/feeds_manager.dart';
 import '../model/feed.dart';
 import '_build_context_extension.dart';
+import '_spacing.dart';
 import 'book_chapter_dialog.dart';
 
 class FeedTitleBar extends WatchingWidget {
@@ -18,20 +19,27 @@ class FeedTitleBar extends WatchingWidget {
       children: [
         Visibility(
           visible: feed.state.isRead && identical(feed, feedsManager.lastModifiedFeed),
-          child: const Padding(
-            padding: EdgeInsets.only(left: 8.0),
-            child: Tooltip(message: 'This is the last chapter you read', child: Icon(Icons.auto_stories)),
+          child: Padding(
+            padding: const EdgeInsets.only(left: AppSpacing.xs),
+            child: Tooltip(
+              message: 'This is the last chapter you read',
+              child: Icon(Icons.auto_stories, size: AppSpacing.iconMedium),
+            ),
           ),
         ),
         Expanded(
           child: Padding(
-            padding: const EdgeInsets.only(left: 8.0),
-            child: Text(feed.readingList.name, style: const TextStyle(fontSize: 18), overflow: TextOverflow.ellipsis),
+            padding: const EdgeInsets.only(left: AppSpacing.xs),
+            child: Text(
+              feed.readingList.name,
+              style: context.readingListName,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
         ),
         IconButton(
           key: Key(feed.readingList.key), // for screenshot generator
-          icon: const Icon(Icons.unfold_more),
+          icon: Icon(Icons.unfold_more, size: AppSpacing.iconMedium),
           onPressed: () => context.showDialogWithBlurBackground(BookChapterDialog(feed)),
         ),
       ],
