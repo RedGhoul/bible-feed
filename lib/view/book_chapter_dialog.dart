@@ -6,7 +6,8 @@ import 'package:watch_it/watch_it.dart';
 import '../model/feed.dart';
 import '../model/list_wheel_state.dart';
 import '_build_context_extension.dart';
-import '_constants.dart';
+import '_icons.dart';
+import '_spacing.dart';
 import 'book_chapter_dialog_footer.dart';
 import 'book_chapter_dialog_wheels.dart';
 
@@ -21,12 +22,16 @@ class BookChapterDialog extends StatelessWidget {
   @override
   build(context) {
     withBackground(Widget child) => // fix 3.19 -> 3.22 background color regression
-        Container(alignment: Alignment.center, color: context.colorScheme.surfaceContainerHigh, child: child);
+        Container(
+          alignment: Alignment.center,
+          color: context.colorScheme.surfaceContainerHigh,
+          child: child,
+        );
 
     return LayoutBuilder(
       builder: (_, constraints) {
-        final maxHeight = constraints.maxHeight * 1.8;
-        final maxWidth = [300, constraints.maxWidth * 0.5].reduce(max).toDouble();
+        final maxHeight = constraints.maxHeight * 0.8;
+        final maxWidth = min(400.0, constraints.maxWidth * 0.9);
         final isVisible = constraints.maxHeight > 280;
 
         return Dialog(
@@ -35,17 +40,60 @@ class BookChapterDialog extends StatelessWidget {
             constraints: BoxConstraints(maxHeight: maxHeight, maxWidth: maxWidth),
             child: Column(
               children: [
+                // Header
                 Visibility(
                   visible: isVisible,
                   child: withBackground(
                     Padding(
-                      padding: Constants.defaultPadding,
-                      child: Text(feed.readingList.name, style: const TextStyle(fontWeight: FontWeight.bold)),
+                      padding: AppSpacing.paddingMD,
+                      child: Row(
+                        children: [
+                          Icon(
+                            AppIcons.bibleOpen,
+                            size: AppIcons.medium,
+                            color: context.colorScheme.primary,
+                          ),
+                          SizedBox(width: AppSpacing.sm),
+                          Expanded(
+                            child: Text(
+                              feed.readingList.name,
+                              style: context.textTheme.titleLarge,
+                            ),
+                          ),
+                          IconButton(
+                            icon: Icon(AppIcons.close, size: AppIcons.medium),
+                            onPressed: () => Navigator.pop(context),
+                            tooltip: 'Close',
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
+
+                // Divider
+                if (isVisible)
+                  Divider(
+                    height: 1,
+                    thickness: 1,
+                    color: context.colorScheme.outlineVariant,
+                  ),
+
+                // Wheels
                 Expanded(child: BookChapterDialogWheels(feed.readingList)),
-                withBackground(BookChapterDialogFooter(feed)),
+
+                // Footer with divider
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Divider(
+                      height: 1,
+                      thickness: 1,
+                      color: context.colorScheme.outlineVariant,
+                    ),
+                    withBackground(BookChapterDialogFooter(feed)),
+                  ],
+                ),
               ],
             ),
           ),

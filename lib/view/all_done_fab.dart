@@ -3,7 +3,10 @@ import 'package:watch_it/watch_it.dart';
 
 import '../manager/all_done_dialog_manager.dart';
 import '../manager/feeds_manager.dart';
+import '_animations.dart';
 import '_build_context_extension.dart';
+import '_colors.dart';
+import '_icons.dart';
 import 'all_done_dialog.dart';
 
 class AllDoneFab extends WatchingWidget {
@@ -19,14 +22,16 @@ class AllDoneFab extends WatchingWidget {
     if (sl<AllDoneDialogManager>().isAutoShow) Future(showAllDoneDialog);
 
     return AnimatedScale(
-      duration: const Duration(milliseconds: 200),
-      scale: feedsManager.areChaptersRead ? 1 : 0,
+      duration: AppAnimations.fast,
+      curve: AppAnimations.emphasizedDecelerate,
+      scale: feedsManager.areChaptersRead ? AppAnimations.noScale : AppAnimations.scaleZero,
       child: FloatingActionButton(
-        backgroundColor: Colors.green,
+        backgroundColor: AppColors.successColor,
         foregroundColor: Colors.white,
         onPressed: showAllDoneDialog,
         shape: const CircleBorder(),
-        child: const Icon(Icons.done, size: 35),
+        elevation: AppSpacing.elevationMedium,
+        child: Icon(AppIcons.done, size: 35),
       ),
     );
   }

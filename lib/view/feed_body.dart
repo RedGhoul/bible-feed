@@ -4,10 +4,12 @@ import 'package:watch_it/watch_it.dart';
 import '../manager/feed_tap_manager.dart';
 import '../model/feed.dart';
 import '_build_context_extension.dart';
+import '_spacing.dart';
 import 'bible_reader_launch_failed_dialog.dart';
 import 'book_chapter_dialog.dart';
 import 'feed_book_chapter.dart';
 import 'feed_title_bar.dart';
+import 'widgets/enhanced_progress_indicator.dart';
 
 class FeedBody extends StatelessWidget {
   final Feed feed;
@@ -25,6 +27,9 @@ class FeedBody extends StatelessWidget {
   build(context) {
     return InkWell(
       enableFeedback: false,
+      borderRadius: AppSpacing.borderRadiusMD,
+      splashColor: context.colorScheme.primary.withOpacity(0.1),
+      highlightColor: context.colorScheme.primary.withOpacity(0.05),
       onLongPress: () => context.showDialogWithBlurBackground(BookChapterDialog(feed)),
       onTap: () => _handleTap(context),
       child: LayoutBuilder(
@@ -36,8 +41,14 @@ class FeedBody extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Visibility(visible: isVisible, child: FeedTitleBar(feed)),
-              LinearProgressIndicator(backgroundColor: context.colorScheme.surface, value: feed.progress),
-              DefaultTextStyle.merge(style: TextStyle(fontSize: fontSize), child: FeedBookChapter(feed)),
+              EnhancedProgressIndicator(
+                progress: feed.progress,
+                height: 4.0,
+              ),
+              DefaultTextStyle.merge(
+                style: TextStyle(fontSize: fontSize),
+                child: FeedBookChapter(feed),
+              ),
             ],
           );
         },
